@@ -36,6 +36,7 @@ namespace leetcode2
                 carry = sum / 10;
                 current = current.next = new ListNode(digit);
             }
+            if (carry != 0) current.next = new ListNode(carry);
             return root.next;
         }
     }
