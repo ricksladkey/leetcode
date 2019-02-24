@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace leetcode2
+﻿namespace leetcode2
 {
      public class ListNode {
          public int val;
