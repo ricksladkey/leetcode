@@ -26,27 +26,43 @@ namespace leetcode1284
             // Count non-duplicates of largest power of ten not greater than N.
             result += CountNonDupPow10(digits.Count - 1);
 
-            // The number starts with a non-zero digit. Count non-duplicates
-            // that start with one through through the first digit followed by
-            // all zeros.
-            result += (digits[digits.Count - 1] - 1) * CountNonDup(digits.Count - 1, 9);
+            if (digits[digits.Count - 1] > 1)
+            {
+                // The number starts with a non-zero digit. Count
+                // non-duplicates that start with one through through the first
+                // digit followed by all zeros.
+                var first = (digits[digits.Count - 1] - 1) * CountNonDup(digits.Count - 1, 9);
+                if (_debug) Console.WriteLine("remainder to first digit");
+                Debug((int)Math.Pow(10, digits.Count - 1),
+                    (int)(digits[digits.Count - 1] * Math.Pow(10, digits.Count - 1) - 1),
+                    first);
+                result += first;
+            }
+            var lo = (int)(digits[digits.Count - 1] * Math.Pow(10, digits.Count - 1));
 
             // Count non-duplicates for each prefix up to each remaining digit.
             var appeared = new bool[10];
+            appeared[digits[digits.Count - 1]] = true;
             for (var i = digits.Count - 2; i >= 0; i--)
             {
                 var digit = digits[i];
+                var hi = lo + (int)(digit * Math.Pow(10, i) -  1);
                 var left = 10 - (digits.Count - i);
                 var mult = digit;
                 for (var j = 0; j < digit; j++)
                 {
                     if (appeared[j]) mult -= 1;
                 }
-                result += mult * CountNonDup(i, left);
+                var range = mult * CountNonDup(i, left);
+                result += range;
+                if (_debug) Console.WriteLine("power {0}, mult {1}, count {2}", i, mult, CountNonDup(i, left));
+                Debug(lo, hi, range);
                 if (appeared[digit]) break;
                 appeared[digit] = true;
+                lo = hi + 1;
             }
             var itself = BruteDup(N) ? 0 : 1;
+            if (_debug) Console.WriteLine("itself");
             Debug(N, N, itself);
             result += itself;
             return N - result;
@@ -65,8 +81,9 @@ namespace leetcode1284
             for (var i = 1;  i <= power; i++)
             {
                 var product = 9;
-                for (var factor = 9; factor > 9 - i; factor--) product *= factor;
-                Debug((int)Math.Pow(10, power - 1), (int)(Math.Pow(10, power) - 1), result);
+                for (var factor = 9; factor > 10 - i; factor--) product *= factor;
+                if (_debug) Console.WriteLine("power {0}", power);
+                Debug((int)Math.Pow(10, power - 1), (int)(Math.Pow(10, power) - 1), product);
                 result += product;
             }
             return result;
