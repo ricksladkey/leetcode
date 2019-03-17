@@ -25,11 +25,18 @@ namespace leetcode1284
             result += (digits[digits.Count - 1] - 1) * CountNonDup(digits.Count - 1, 9);
 
             // Count non-duplicates for each prefix upto each remaining digit.
+            var appeared = new bool[10];
             for (var i = digits.Count - 2; i >= 0; i--)
             {
                 var digit = digits[i];
                 var left = 10 - (digits.Count - i);
-                result += digit * CountNonDup(i, left);
+                var mult = digit;
+                for (var j = 0; j < digit; j++)
+                {
+                    if (appeared[j]) mult -= 1;
+                }
+                appeared[digit] = true;
+                result += mult * CountNonDup(i, left);
             }
             return N - result;
         }
@@ -76,20 +83,31 @@ namespace leetcode1284
             }
             return result;
         }
+        private int BruteNumDupDigitsAtMostN(int N)
+        {
+            return BruteNumDupDigitsAtMostN(1, N);
+        }
+
         private int BruteNumNonDupDigitsAtMostN(int N1, int N2)
         {
             return N2 - N1 + 1 - BruteNumDupDigitsAtMostN(N1, N2);
         }
+        private void RunTest(int N)
+        {
+            Console.WriteLine("{0}: {1}, {2}", N, BruteNumDupDigitsAtMostN(N), NumDupDigitsAtMostN(N));
+        }
         public void Main()
         {
-            Console.WriteLine("{0}, {1}", NumDupDigitsAtMostN(20), 1);
-            Console.WriteLine("{0}, {1}", NumDupDigitsAtMostN(1), 0);
-            Console.WriteLine("{0}, {1}", NumDupDigitsAtMostN(10), 0);
-            Console.WriteLine("{0}, {1}", NumDupDigitsAtMostN(100), 10);
-            Console.WriteLine("{0}, {1}", NumDupDigitsAtMostN(1000), 262);
-            Console.WriteLine("{0}, {1}", NumDupDigitsAtMostN(10000), 4726);
-            Console.WriteLine("{0}, {1}", NumDupDigitsAtMostN(20000), 11702);
-            Console.WriteLine("{0}, {1}", NumDupDigitsAtMostN(76528), 50867);
+            RunTest(20);
+            RunTest(1);
+            RunTest(10);
+            RunTest(100);
+            RunTest(1000);
+            RunTest(2000);
+            RunTest(2100);
+            RunTest(2130);
+            RunTest(2134);
+            RunTest(76528);
         }
     }
 }
