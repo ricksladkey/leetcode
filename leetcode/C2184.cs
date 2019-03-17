@@ -24,7 +24,7 @@ namespace leetcode1284
             // followed by all zeros.
             result += (digits[digits.Count - 1] - 1) * CountNonDup(digits.Count - 1, 9);
 
-            // Count non-duplicates for each prefix upto each remaining digit.
+            // Count non-duplicates for each prefix up to each remaining digit.
             var appeared = new bool[10];
             for (var i = digits.Count - 2; i >= 0; i--)
             {
@@ -35,8 +35,9 @@ namespace leetcode1284
                 {
                     if (appeared[j]) mult -= 1;
                 }
-                appeared[digit] = true;
                 result += mult * CountNonDup(i, left);
+                if (appeared[digit]) break;
+                appeared[digit] = true;
             }
             return N - result;
         }
