@@ -39,7 +39,7 @@ namespace leetcode004
                     else if (k > limit) lo2 = mid2 + 1;
                     else { hi1 = mid1; lo2 = mid2; }
                 }
-                if (nums1[mid1] <= nums2[mid2])
+                else
                 {
                     if (k < limit) hi2 = mid2;
                     else if (k > limit) lo1 = mid1 + 1;
