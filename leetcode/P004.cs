@@ -7,7 +7,7 @@ namespace leetcode004
     public class Solution
     {
         bool _debug = false;
-        public double findMedianSortedArrays(int[] nums1, int[] nums2)
+        public double FindMedianSortedArrays(int[] nums1, int[] nums2)
         {
             var n1 = nums1.Length;
             var n2 = nums2.Length;
@@ -72,9 +72,9 @@ namespace leetcode004
         }
         public void Main()
         {
-            Console.WriteLine("{0}", findMedianSortedArrays(new[] { 1, 3 }, new[] { 2 }));
-            Console.WriteLine("{0}", findMedianSortedArrays(new[] { 1, 2 }, new[] { 3, 4 }));
-            Console.WriteLine("{0}", findMedianSortedArrays(new[] { 1, 3, 5, 7 }, new[] { 2, 4, 6, 8 }));
+            Console.WriteLine("{0}", FindMedianSortedArrays(new[] { 1, 3 }, new[] { 2 }));
+            Console.WriteLine("{0}", FindMedianSortedArrays(new[] { 1, 2 }, new[] { 3, 4 }));
+            Console.WriteLine("{0}", FindMedianSortedArrays(new[] { 1, 3, 5, 7 }, new[] { 2, 4, 6, 8 }));
         }
     }
 }
