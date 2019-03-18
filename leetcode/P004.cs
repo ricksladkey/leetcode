@@ -20,6 +20,36 @@ namespace leetcode004
             }
             else return select(nums1, nums2, n / 2);
         }
+        int select(int[] nums1, int[] nums2, int k)
+        {
+            var lo1 = 0;
+            var hi1 = nums1.Length;
+            var lo2 = 0;
+            var hi2 = nums2.Length;
+            while (lo1 != hi1 && lo2 != hi2)
+            {
+                if (_debug) Console.WriteLine("{0} / {1}",
+                    ArrayString(nums1, lo1, hi1), ArrayString(nums2, lo2, hi2));
+                var mid1 = lo1 + (hi1 - lo1) / 2;
+                var mid2 = lo2 + (hi2 - lo2) / 2;
+                var limit = mid1 + mid2;
+                if (nums1[mid1] > nums2[mid2])
+                {
+                    if (k < limit) hi1 = mid1;
+                    else if (k > limit) lo2 = mid2 + 1;
+                    else { hi1 = mid1; lo2 = mid2; }
+                }
+                if (nums1[mid1] <= nums2[mid2])
+                {
+                    if (k < limit) hi2 = mid2;
+                    else if (k > limit) lo1 = mid1 + 1;
+                    else { hi2 = mid2; lo1 = mid1; }
+                }
+            }
+            if (_debug) Console.WriteLine("{0} / {1}",
+                ArrayString(nums1, lo1, hi1), ArrayString(nums2, lo2, hi2));
+            return lo1 != hi1 ? nums1[k - lo2] : nums2[k - lo1];
+        }
         private string ArrayString(int[] array, int lo, int hi)
         {
             var builder = new StringBuilder();
@@ -31,44 +61,6 @@ namespace leetcode004
             }
             builder.Append("]");
             return builder.ToString();
-        }
-        int select(int[] nums1, int[] nums2, int k)
-        {
-            var n1 = nums1.Length;
-            var n2 = nums2.Length;
-            var lo1 = 0;
-            var hi1 = n1;
-            var lo2 = 0;
-            var hi2 = n2;
-            while (lo1 != hi1 && lo2 != hi2)
-            {
-                if (_debug) Console.WriteLine("{0} / {1}", ArrayString(nums1, lo1, hi1), ArrayString(nums2, lo2, hi2));
-                var mid1 = lo1 + (hi1 - lo1) / 2;
-                var mid2 = lo2 + (hi2 - lo2) / 2;
-                var limit = mid1 + mid2;
-                if (nums1[mid1] > nums2[mid2])
-                {
-                    if (k < limit) hi1 = mid1;
-                    else if (k > limit) lo2 = mid2 + 1;
-                    else
-                    {
-                        hi1 = mid1;
-                        lo2 = mid2;
-                    }
-                }
-                if (nums1[mid1] <= nums2[mid2])
-                {
-                    if (k < limit) hi2 = mid2;
-                    else if (k > limit) lo1 = mid1 + 1;
-                    else
-                    {
-                        hi2 = mid2;
-                        lo1 = mid1;
-                    }
-                }
-            }
-            if (_debug) Console.WriteLine("{0} / {1}", ArrayString(nums1, lo1, hi1), ArrayString(nums2, lo2, hi2));
-            return lo1 != hi1 ? nums1[k - lo2] : nums2[k - lo1];
         }
         public void Main()
         {
