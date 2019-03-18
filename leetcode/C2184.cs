@@ -147,7 +147,7 @@ namespace leetcode1284
         }
         public void Main()
         {
-            for (var i = 1; i <= 1000; i++) CheckResult(i);
+            for (var i = 1; i <= 10000; i++) CheckResult(i);
             RunTest(20);
             RunTest(1);
             RunTest(10);
