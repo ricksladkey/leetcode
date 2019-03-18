@@ -9,18 +9,16 @@ namespace leetcode004
         bool _debug = false;
         public double FindMedianSortedArrays(int[] nums1, int[] nums2)
         {
-            var n1 = nums1.Length;
-            var n2 = nums2.Length;
-            var n = n1 + n2;
+            var n = nums1.Length + nums2.Length;
             if (n % 2 == 0)
             {
-                var select1 = select(nums1, nums2, n / 2 - 1);
-                var select2 = select(nums1, nums2, n / 2);
+                var select1 = Select(nums1, nums2, n / 2 - 1);
+                var select2 = Select(nums1, nums2, n / 2);
                 return (select1 + select2) / 2.0;
             }
-            else return select(nums1, nums2, n / 2);
+            else return Select(nums1, nums2, n / 2);
         }
-        int select(int[] nums1, int[] nums2, int k)
+        int Select(int[] nums1, int[] nums2, int k)
         {
             var lo1 = 0;
             var hi1 = nums1.Length;
