@@ -32,11 +32,7 @@ namespace leetcode
         Item Dequeue() {
             Count -= 1;
             var pair = dict.First();
-            if (pair.Value.Count == 0) {
-                var item = pair.Key;
-                dict.Remove(item);
-                return item;
-            }
+            if (pair.Value.Count == 0) { dict.Remove(pair.Key); return pair.Key; }
             else return pair.Value.Pop();
         }
 	}
