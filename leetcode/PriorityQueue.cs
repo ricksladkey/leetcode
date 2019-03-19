@@ -22,18 +22,22 @@ namespace leetcode
         Item Dequeue() { var min = dict.First().Key; dict.Remove(min); return min.Item; }
 	}
 	public class PriorityQueue2<Item> where Item : IComparable<Item> {
-		private readonly SortedDictionary<Item, Stack<Item>> dict = new SortedDictionary<Item, Stack<Item>>();
+		private readonly SortedDictionary<Item, Stack<Item>> dict =
+            new SortedDictionary<Item, Stack<Item>>();
         public int Count { get; private set; }
         void Enqueue(Item item) {
             Count += 1;
-            if (dict.TryGetValue(item, out Stack<Item> stack)) stack.Push(item);
-            else dict.Add(item, new Stack<Item>());
+            if (dict.TryGetValue(item, out Stack<Item> stack)) {
+                if (stack == null) stack = dict[item] = new Stack<Item>();
+                stack.Push(item);
+            }
+            else dict[item] = null;
         }
         Item Dequeue() {
             Count -= 1;
             var pair = dict.First();
-            if (pair.Value.Count == 0) { dict.Remove(pair.Key); return pair.Key; }
-            else return pair.Value.Pop();
+            if (pair.Value != null && pair.Value.Count != 0) return pair.Value.Pop();
+            else { dict.Remove(pair.Key); return pair.Key; }
         }
 	}
 }
