@@ -4,11 +4,11 @@ using System.Linq;
 
 namespace leetcode
 {
-	public class PriorityQueue<Item> where Item : IComparable<Item> {
+	public class PriorityQueue1<Item> where Item : IComparable<Item> {
 		private struct Key : IComparable<Key> {
             public Item Item { get; }
             public uint Seq { get; }
-            public Key(Item item, uint seq) { Item = item; Seq = seq;  }
+            public Key(Item item, uint seq) { Item = item; Seq = seq; }
             public int CompareTo(Key other) {
                 var result = Item.CompareTo(other.Item);
                 if (result != 0) return result;
@@ -19,6 +19,25 @@ namespace leetcode
 		private uint seq = 0;
         public int Count => dict.Count;
         void Enqueue(Item item) => dict.Add(new Key(item, seq++), true);
-        Item Dequeue(Item item) { var min = dict.First().Key; dict.Remove(min); return min.Item; }
+        Item Dequeue() { var min = dict.First().Key; dict.Remove(min); return min.Item; }
+	}
+	public class PriorityQueue2<Item> where Item : IComparable<Item> {
+		private SortedDictionary<Item, Stack<Item>> dict = new SortedDictionary<Item, Stack<Item>>();
+        public int Count { get; private set; }
+        void Enqueue(Item item) {
+            Count += 1;
+            if (dict.TryGetValue(item, out Stack<Item> stack)) stack.Push(item);
+            else dict.Add(item, new Stack<Item>());
+        }
+        Item Dequeue() {
+            Count -= 1;
+            var pair = dict.First();
+            if (pair.Value.Count == 0) {
+                var item = pair.Key;
+                dict.Remove(item);
+                return item;
+            }
+            else return pair.Value.Pop();
+        }
 	}
 }
