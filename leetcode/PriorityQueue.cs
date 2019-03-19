@@ -6,9 +6,8 @@ namespace leetcode
 {
 	public class PriorityQueue1<Item> where Item : IComparable<Item> {
 		private struct Key : IComparable<Key> {
-            public Item Item { get; }
-            public uint Seq { get; }
-            public Key(Item item, uint seq) { Item = item; Seq = seq; }
+            public Item Item { get; set; }
+            public uint Seq { get; set; }
             public int CompareTo(Key other) {
                 var result = Item.CompareTo(other.Item);
                 if (result != 0) return result;
@@ -18,7 +17,7 @@ namespace leetcode
 		private readonly SortedDictionary<Key, bool> dict = new SortedDictionary<Key, bool>();
 		private uint seq = 0;
         public int Count => dict.Count;
-        void Enqueue(Item item) => dict.Add(new Key(item, seq++), true);
+        void Enqueue(Item item) => dict.Add(new Key { Item = item, Seq = seq++ }, true);
         Item Dequeue() { var min = dict.First().Key; dict.Remove(min); return min.Item; }
 	}
 	public class PriorityQueue2<Item> where Item : IComparable<Item> {
