@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace leetcode1
+namespace leetcode0001
 {
     public class Solution
     {

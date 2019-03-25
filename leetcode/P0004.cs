@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace leetcode004
+namespace leetcode0004
 {
     public class Solution
     {

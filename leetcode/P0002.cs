@@ -1,4 +1,4 @@
-﻿namespace leetcode2
+﻿namespace leetcode0002
 {
      public class ListNode {
          public int val;

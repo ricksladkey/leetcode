@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace leetcode49
+namespace leetcode0049
 {
     public class Solution
     {
