@@ -6,7 +6,7 @@ namespace leetcode
     {
         public static void Main()
         {
-            new leetcode0033.Solution().Main();
+            new leetcode0042.Solution().Main();
         }
     }
 }
