@@ -6,36 +6,64 @@ namespace leetcode0037
 {
     public class Solution
     {
-        private List<List<(int, int)>> groups;
-        private Dictionary<int, int> map;
-        public void SolveSudoku(char[][] board)
+        private List<List<(int, int)>> groups = new List<List<(int, int)>>();
+        private Dictionary<int, int> map = new Dictionary<int, int>();
+        public Solution()
         {
-            var b = ParseBoard(board);
-            groups = new List<List<(int, int)>>();
             MakeGroups();
             MakeMap();
-            var solving = true;
-            while (solving)
+        }
+        public void SolveSudoku(char[][] b)
+        {
+            var board = ParseBoard(b);
+            Solve(board);
+            CopyToBoard(board, b);
+        }
+        private void Solve(int[,] board)
+        {
+            var solved = Solved(board);
+            while (!solved)
             {
-                CheckBoard(b);
-                var cnt = 0;
-                for (var row = 0; row < 9; row++)
+                while (DeduceNumbers(board));
+                solved = Solved(board);
+                if (!solved)
                 {
-                    for (var col = 0; col < 9; col++)
+                    // Iterative solver.
+                    return;
+                }
+            }
+        }
+        private bool Solved(int[,] board)
+        {
+            for (var row = 0; row < 9; row++)
+            {
+                for (var col = 0; col < 9; col++)
+                {
+                    var num = board[row, col];
+                    if ((num & 1) != 0) return false;
+                }
+            }
+            return true;
+        }
+        private bool DeduceNumbers(int[,] board)
+        {
+            CheckBoard(board);
+            var cnt = 0;
+            for (var row = 0; row < 9; row++)
+            {
+                for (var col = 0; col < 9; col++)
+                {
+                    var num = board[row, col];
+                    if ((num & 1) == 0) continue;
+                    var bits = ~num & ((1 << 10) - 2);
+                    if ((bits & (bits - 1)) == 0)
                     {
-                        var num = b[row, col];
-                        if ((num & 1) == 0) continue;
-                        var bits = ~num & ((1 << 10) - 2);
-                        if ((bits & (bits - 1)) == 0)
-                        {
-                            b[row, col] = bits;
-                            cnt += 1;
-                        }
+                        board[row, col] = bits;
+                        cnt += 1;
                     }
                 }
-                if (cnt == 0) solving = false;
             }
-            CopyToBoard(b, board);
+            return cnt > 0;
         }
         private bool CheckBoard(int[,] board)
         {
@@ -75,15 +103,15 @@ namespace leetcode0037
             }
             return b;
         }
-        private void CopyToBoard(int[,] b, char[][] board)
+        private void CopyToBoard(int[,] board, char[][] b)
         {
             for (var row = 0; row < 9; row++)
             {
                 for (var col = 0; col < 9; col++)
                 {
-                    var num = b[row, col];
+                    var num = board[row, col];
                     var val = (num & 1) != 0 ? '.' : map[num] + '0';
-                    board[row][col] = (char)val;
+                    b[row][col] = (char)val;
                 }
             }
         }
@@ -116,7 +144,6 @@ namespace leetcode0037
         }
         private void MakeMap()
         {
-            map = new Dictionary<int, int>();
             for (var num = 1; num <= 9; num++) map.Add(1 << num, num);
         }
     }
