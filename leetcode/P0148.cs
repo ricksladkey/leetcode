@@ -30,16 +30,19 @@ namespace leetcode0148
             if (head == null) return null;
             var n = 0;
             for (var current = head; current != null; current = current.next) n += 1;
-            var dummy = new ListNode(-1);
-            dummy.next = head;
+            var dummy1 = new ListNode(-1);
+            dummy1.next = head;
+            var dummy2 = new ListNode(-1);
             for (var m = 1; m < n; m *= 2) {
-                var prev1 = dummy;
+                var prev1 = dummy1;
                 while (prev1.next != null) {
                     
-                    // Grab the next m items into list1.
+                    // Grab up to the next m items into list1.
                     var list1 = prev1.next;
                     var prev2 = list1;
-                    for (var i = 0; i < m - 1; i++) prev2 = prev2.next;
+                    for (var i = 0; i < m - 1 && prev2 != null; i++) prev2 = prev2.next;
+
+                    if (prev2 == null) break;
                     
                     // Grab up to the next m items into list2.
                     var list2 = prev2.next;
@@ -54,13 +57,12 @@ namespace leetcode0148
                     if (prev3 != null) prev3.next = null;
 
                     // Merge the two lists, terminating with remaining items.
-                    (prev1.next, prev1) = Merge(list1, list2, list3);
+                    (prev1.next, prev1) = Merge(dummy2, list1, list2, list3);
                 }
             }
-            return dummy.next;
+            return dummy1.next;
         }
-        private (ListNode, ListNode) Merge(ListNode list1, ListNode list2, ListNode list3) {
-            var dummy = new ListNode(-1);
+        private (ListNode, ListNode) Merge(ListNode dummy, ListNode list1, ListNode list2, ListNode list3) {
             var prev = dummy;
             while (list1 != null || list2 != null) {
                 var first = false;
@@ -95,6 +97,7 @@ namespace leetcode0148
         {
             var result1 = SortList(MakeList(new[] { 4, 2, 1, 3 }));
             var result2 = SortList(MakeList(new[] { 4, 2, 3 }));
+            var result3 = SortList(MakeList(new[] { 5, 4, 1, 2, 4, 6, 7, 8, 11, 9 }));
             Console.WriteLine("done!");
         }
     }
