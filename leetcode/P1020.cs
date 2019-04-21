@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace leetcode1031
+namespace leetcode1020
 {
     public class Solution {
         private int[] id;

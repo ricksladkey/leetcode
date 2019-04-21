@@ -6,8 +6,8 @@ namespace leetcode
     {
         public static void Main()
         {
-            Console.WriteLine("xyzzy");
             //leetcode1032.StreamChecker.Go();
+            new leetcode0148.Solution().Main();
         }
     }
 }
