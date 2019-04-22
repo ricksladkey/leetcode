@@ -51,13 +51,18 @@ namespace leetcode1020
                     if (square == 1) {
 
                         // Check the four neighbors for lands and connect them.
-                        if (row > 0 && grid[row - 1][col] == 1) uf.Union(getid(row, col), getid(row - 1, col));
-                        if (col > 0 && grid[row][col - 1] == 1) uf.Union(getid(row, col), getid(row, col - 1));
-                        if (row < rows - 1 && grid[row + 1][col] == 1) uf.Union(getid(row, col), getid(row + 1, col));
-                        if (col < cols - 1 && grid[row][col + 1] == 1) uf.Union(getid(row, col), getid(row, col + 1));
+                        if (row > 0 && grid[row - 1][col] == 1)
+                            uf.Union(GetId(row, col), GetId(row - 1, col));
+                        if (col > 0 && grid[row][col - 1] == 1)
+                            uf.Union(GetId(row, col), GetId(row, col - 1));
+                        if (row < rows - 1 && grid[row + 1][col] == 1)
+                            uf.Union(GetId(row, col), GetId(row + 1, col));
+                        if (col < cols - 1 && grid[row][col + 1] == 1)
+                            uf.Union(GetId(row, col), GetId(row, col + 1));
 
                         // Connect border cells with the edge.
-                        if (row == 0 || col == 0 || row == rows - 1 || col == cols - 1) uf.Union(getid(row, col), n);
+                        if (row == 0 || col == 0 || row == rows - 1 || col == cols - 1)
+                            uf.Union(GetId(row, col), n);
                     }
                 }
             }
@@ -67,12 +72,12 @@ namespace leetcode1020
             for (var row = 0; row < rows; row++) {
                 for (var col = 0; col < cols; col++) {
                     var square = grid[row][col];
-                    if (square == 1 && !uf.Find(getid(row, col), n)) cnt += 1;
+                    if (square == 1 && !uf.Find(GetId(row, col), n)) cnt += 1;
                 }
             }
             return cnt;
         }
-        private int getid(int row, int col) {
+        private int GetId(int row, int col) {
             return row * cols + col;
         }
     }
