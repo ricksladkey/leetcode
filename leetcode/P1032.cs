@@ -13,6 +13,15 @@ namespace leetcode1032
                 public Dictionary<TKey, Node> map = new Dictionary<TKey, Node>();
             }
             private Node root = new Node();
+            public void Insert(IEnumerable<TKey> s, TValue value) {
+                var node = root;
+                foreach (var c in s) {
+                    if (!node.map.ContainsKey(c)) node.map[c] = new Node();
+                    node = node.map[c];
+                }
+                node.hasValue = true;
+                node.value = value;
+            }
             public bool TryFind(IEnumerable<TKey> s, bool prefix, out TValue value) {
                 value = default(TValue);
                 var node = root;
@@ -23,15 +32,6 @@ namespace leetcode1032
                 }
                 if (node.hasValue) { value = node.value; return true; }
                 return false;
-            }
-            public void Insert(IEnumerable<TKey> s, TValue value) {
-                var node = root;
-                foreach (var c in s) {
-                    if (!node.map.ContainsKey(c)) node.map[c] = new Node();
-                    node = node.map[c];
-                }
-                node.hasValue = true;
-                node.value = value;
             }
         }
         private Trie<char, bool> trie = new Trie<char, bool>();
