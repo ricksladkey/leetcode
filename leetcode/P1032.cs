@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace leetcode1032
 {
@@ -10,39 +8,29 @@ namespace leetcode1032
     public class StreamChecker {
         public class Trie<TKey, TValue> {
             private class Node {
-                public TValue value;
+                public bool hasValue = false;
+                public TValue value = default(TValue);
                 public Dictionary<TKey, Node> map = new Dictionary<TKey, Node>();
             }
             private Node root = new Node();
-            public bool TryFindPrefix(IEnumerable<TKey> s, Func<TValue, bool> where) {
-                var node = root;
-                foreach (var c in s) {
-                    if (node.map.TryGetValue(c, out Node child)) node = child;
-                    else return false;
-                    if (where(node.value)) return true;
-                }
-                return where(node.value);
-            }
-            public bool TryFind(IEnumerable<TKey> s, out TValue value) {
-                var node = root;
+            public bool TryFind(IEnumerable<TKey> s, bool prefix, out TValue value) {
                 value = default(TValue);
+                var node = root;
                 foreach (var c in s) {
+                    if (prefix && node.hasValue) { value = node.value; return true; }
                     if (node.map.TryGetValue(c, out Node child)) node = child;
                     else return false;
                 }
-                value = node.value;
-                return true;
+                if (node.hasValue) { value = node.value; return true; }
+                return false;
             }
             public void Insert(IEnumerable<TKey> s, TValue value) {
                 var node = root;
                 foreach (var c in s) {
-                    if (node.map.TryGetValue(c, out Node child)) node = child;
-                    else {
-                        var newNode = new Node();
-                        node.map.Add(c, newNode);
-                        node = newNode;
-                    }
+                    if (!node.map.ContainsKey(c)) node.map[c] = new Node();
+                    node = node.map[c];
                 }
+                node.hasValue = true;
                 node.value = value;
             }
         }
@@ -53,7 +41,7 @@ namespace leetcode1032
         }
         public bool Query(char letter) {
             stack.Push(letter);
-            return trie.TryFindPrefix(stack, value => value);
+            return trie.TryFind(stack, true, out bool value);
         }
         public static void Go() {
             var streamChecker = new StreamChecker(new[] { "cd", "f", "kl" });
