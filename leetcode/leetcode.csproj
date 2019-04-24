@@ -105,6 +105,7 @@
     <Compile Include="P0049.cs" />
     <Compile Include="P0081.cs" />
     <Compile Include="P0095.cs" />
+    <Compile Include="P0146.cs" />
     <Compile Include="P0148.cs" />
     <Compile Include="P1020.cs" />
     <Compile Include="P1032.cs" />

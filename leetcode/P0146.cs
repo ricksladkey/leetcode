@@ -34,13 +34,12 @@ namespace leetcode0146
         
         public int Get(int key) {
             if (slots.TryGetValue(key, out int slot)) {
-                var value = values[slot];
-                Put(key, value);
-                return value;
+                Use(slot);
+                return values[slot];
             }
             return -1;
         }
-        
+
         public void Put(int key, int value) {
             int slot;
             if (!slots.TryGetValue(key, out slot)) {
@@ -52,7 +51,10 @@ namespace leetcode0146
                 slots.Add(key, slot);
                 keys[slot] = key;
             }
+            Use(slot);
             values[slot] = value;
+        }
+        private void Use(int slot) {
             if (slot == first) return;
             next[prev[slot]] = next[slot];
             prev[next[slot]] = prev[slot];
