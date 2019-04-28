@@ -8,36 +8,9 @@ namespace leetcode1036
 {
     public class Solution {
 
-        // Union-Find algorithm
-        public class UnionFind {
-            private int[] id;
-            private int[] sz;
-            public UnionFind(int n) {
-                id = new int[n];
-                sz = new int[n];
-                for (var i = 0; i < n; i++) id[i] = i;
-            }
-            private int Root(int i) {
-                while (i != id[i]) {
-                    id[i] = id[id[i]];
-                    i = id[i];
-                }
-                return i;
-            }
-            public bool Find(int p, int q) {
-                return Root(p) == Root(q);
-            }
-            public void Union(int p, int q) {
-                int i = Root(p);
-                int j = Root(q);
-                if (i == j) return;
-                if (sz[i] < sz[j]) { id[i] = j; sz[j] += sz[i]; }
-                else { id[j] = i; sz[i] += sz[j]; }
-            }
-        }
-
         private int rows, cols;
         private Dictionary<int, int> rowMap, colMap;
+
         public bool IsEscapePossible(int[][] blocked, int[] source, int[] target) {
 
             // Compress consecutive blank rows and columns.
@@ -50,15 +23,14 @@ namespace leetcode1036
 
             // Connect unblocked squares to each other.
             var uf = new UnionFind(rows * cols);
-            var offs = new[] { (0, 1), (1, 0), (0, -1), (-1, 0) };
+            var deltas = new[] { (0, 1), (1, 0), (0, -1), (-1, 0) };
             for (var row = 0; row < rows; row++) for (var col = 0; col < cols; col++) {
-                if (!grid[row, col]) foreach (var off in offs)
+                var id = GetId(row, col);
+                if (!grid[row, col]) foreach (var (dr, dc) in deltas)
                 {
-                    int adjRow = row + off.Item1, adjCol = col + off.Item2;
-                    if (adjRow >= 0 && adjRow < rows && adjCol >= 0 && adjCol < cols)
-                    {
-                        if (!grid[adjRow, adjCol]) uf.Union(GetId(row, col), GetId(adjRow, adjCol));
-                    }
+                    var (r, c) = (row + dr, col + dc);
+                    if (r >= 0 && r < rows && c >= 0 && c < cols && !grid[r, c])
+                        uf.Union(id, GetId(r, c));
                 }
             }
 
@@ -85,6 +57,34 @@ namespace leetcode1036
         }
         private int GetMappedId(int[] pair) {
             return GetId(rowMap[pair[0]], colMap[pair[1]]);
+        }
+
+        // Union-Find algorithm
+        public class UnionFind {
+            private int[] id;
+            private int[] sz;
+            public UnionFind(int n) {
+                id = new int[n];
+                sz = new int[n];
+                for (var i = 0; i < n; i++) id[i] = i;
+            }
+            private int Root(int i) {
+                while (i != id[i]) {
+                    id[i] = id[id[i]];
+                    i = id[i];
+                }
+                return i;
+            }
+            public bool Find(int p, int q) {
+                return Root(p) == Root(q);
+            }
+            public void Union(int p, int q) {
+                int i = Root(p);
+                int j = Root(q);
+                if (i == j) return;
+                if (sz[i] < sz[j]) { id[i] = j; sz[j] += sz[i]; }
+                else { id[j] = i; sz[i] += sz[j]; }
+            }
         }
     }
 }
