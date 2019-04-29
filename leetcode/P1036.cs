@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace leetcode1036
 {
@@ -39,18 +37,16 @@ namespace leetcode1036
         }
 
         private (int, Dictionary<int, int>) GetMap(int[][] blocked, int[] source, int[] target, int index) {
-            var size = 0;
             var map = new Dictionary<int, int>();
             var ids = blocked.Select(pair => pair[index])
                 .Concat(new [] { 0, source[index], target[index], 999999 })
                 .OrderBy(id => id).Distinct().ToArray();
             var next = 0;
             for (var i = 0; i < ids.Length; i++) {
-                if (i != 0) next += Math.Min(2, ids[i] - ids[i - 1]);
+                if (i > 0) next += Math.Min(2, ids[i] - ids[i - 1]);
                 map.Add(ids[i], next);
-                size = Math.Max(size, next + 1);
             }
-            return (size, map);
+            return (next + 1, map);
         }
         private int GetId(int row, int col) {
             return row * cols + col;
